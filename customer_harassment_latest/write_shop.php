@@ -10,13 +10,8 @@ $mail = $_POST["mail"];
 $phone = $_POST["phone"];
 
 //DB接続
-try {
-    //Password:MAMP='root',XAMPP=''
-    $pdo = new PDO('mysql:dbname=gsachademy_unit1;charset=utf8;host=mysql57.gsachademy.sakura.ne.jp','','');
-    //さくらインターネットを使うときは、さくらインターネットのIDとPW
-  } catch (PDOException $e) {
-    exit('DBError:'.$e->getMessage());//エラーが分かるようにするメッセージ
-  }
+include("funcs.php");
+$pdo = db_conn();
 
 //データ登録SQL作成
 
@@ -31,14 +26,9 @@ $status = $stmt->execute();
 
 //データ登録処理後
 if($status==false){
-    //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
-    $error = $stmt->errorInfo();
-    exit("SQLError:".$error[2]);
+  sql_error($stmt);
   }else{
-    //input.phpへリダイレクト
-    header("Location: read_shoplist.php");
-    exit();
-  
+    redirect("read_shoplist.php");
   }
 
 ?>

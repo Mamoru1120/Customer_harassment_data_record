@@ -1,11 +1,7 @@
 <?php
 //DB接続します
-try {
-  //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('mysql:dbname=gsachademy_unit1;charset=utf8;host=mysql57.gsachademy.sakura.ne.jp','','');
-} catch (PDOException $e) {
-  exit('DBConnection Error:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //データ登録SQL作成
 $sql1 = "SELECT * FROM shop_an_table";
@@ -19,13 +15,11 @@ $status2 = $stmt2->execute();
 //データ表示
 $values1 = "";
 if($status1==false) {
-  $error1 = $stmt1->errorInfo();
-  exit("SQLError:".$error1[2]);
+	sql_error($stmt1);
 }
 $values2 = "";
 if($status2==false) {
-  $error2 = $stmt2->errorInfo();
-  exit("SQLError:".$error2[2]);
+	sql_error($stmt2);
 }
 
 //全データ取得
@@ -36,9 +30,6 @@ $json1 = json_encode($values1,JSON_UNESCAPED_UNICODE);
 $values2 =  $stmt2->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
 $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 
-
-//XSSを防ぐことができる
-include("funcs.php");
 ?>
 
 <!DOCTYPE html>

@@ -1,11 +1,7 @@
 <?php
 //DB接続します
-try {
-  //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('mysql:dbname=gsachademy_unit1;charset=utf8;host=mysql57.gsachademy.sakura.ne.jp','','');
-} catch (PDOException $e) {
-  exit('DBConnection Error:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //データ登録SQL作成
 $sql = "SELECT * FROM customer_an_table";
@@ -15,16 +11,13 @@ $status = $stmt->execute();
 //データ表示
 $values = "";
 if($status==false) {
-  $error = $stmt->errorInfo();
-  exit("SQLError:".$error[2]);
+  sql_error($stmt);
 }
 
 //全データ取得
 $values =  $stmt->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
 $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 
-//XSSを防ぐことができる
-include("funcs.php");
 ?>
 
 
@@ -103,16 +96,20 @@ include("funcs.php");
                 <th>年代</th>
                 <th>クレーム回数</th>
                 <th>総クレーム時間</th>
+                <th>編集</th>
+                <th>削除</th>
             </tr>
 
             <?php foreach($values as $v){ ?>
                 <tr>
-                    <td class="customer_id"><?=$v["customer_id"]?></td>
-                    <td class="img"><?=$v["img"]?></td>
-                    <td class="sex"><?=$v["sex"]?></td>
-                    <td class="age"><?=$v["age"]?></td>
-                    <td class="num_of_harassment"><?=$v["num_of_harassment"]?></td>
-                    <td class="total_time_of_harassment"><?=$v["total_time_of_harassment"]?></td>
+                    <td class="customer_id"><?=h($v["customer_id"])?></td>
+                    <td class="img"><?=h($v["img"])?></td>
+                    <td class="sex"><?=h($v["sex"])?></td>
+                    <td class="age"><?=h($v["age"])?></td>
+                    <td class="num_of_harassment"><?=h($v["num_of_harassment"])?></td>
+                    <td class="total_time_of_harassment"><?=h($v["total_time_of_harassment"])?></td>
+                    <td><a href="detail_customer.php?customer_id=<?=h($v["customer_id"])?>">📝</a></td>
+                    <td><a href="delete_customer.php?customer_id=<?=h($v["customer_id"])?>">🚮</a></td>
                 </tr>
             <?php } ?>
 

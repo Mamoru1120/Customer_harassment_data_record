@@ -1,38 +1,31 @@
 <?php
 //DB接続します
-try {
-  //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('mysql:dbname=gsachademy_unit1;charset=utf8;host=mysql57.gsachademy.sakura.ne.jp','','');
-} catch (PDOException $e) {
-  exit('DBConnection Error:'.$e->getMessage());
-}
+$shop_id = $_GET["shop_id"];
+
+include("funcs.php");
+$pdo = db_conn();
 
 //データ登録SQL作成
-$sql = "SELECT * FROM shop_an_table";
+$sql = "SELECT * FROM shop_an_table WHERE shop_id=:shop_id";
 $stmt = $pdo->prepare($sql);
+$stmt->bindValue(':shop_id',    $shop_id,    PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
 $status = $stmt->execute();
 
 //データ表示
 $values = "";
 if($status==false) {
-  $error = $stmt->errorInfo();
-  exit("SQLError:".$error[2]);
+  sql_error($stmt);
 }
 
 //全データ取得
-$values =  $stmt->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
-$json = json_encode($values,JSON_UNESCAPED_UNICODE);
+$v =  $stmt->fetch(); //1レコードのみ取得
 
-//XSSを防ぐことができる
-include("funcs.php");
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>店舗リスト</title>
+<title>店舗情報更新</title>
 <script src="js/jquery-2.1.3.min.js"></script>
 <script src="js/index.js"></script>
 <link rel="stylesheet" href="css/sample.css">
@@ -54,18 +47,16 @@ include("funcs.php");
 
 <main>
 
-      <div id="output_container">
-        
-        <h1>店舗リスト</h1>
+    <div id="output_container">
 
         <div id="addition_container">
-          <form action="write_shop.php" method="post">
-            <h3>新規登録</h3>
+          <form action="update_shop.php" method="post">
+            <h1>店舗情報更新</h1>
             <label>店舗名：</label>
-            <input id="name_of_shop" type="text" name="name_of_shop" placeholder="〇〇店" required>
+            <input id="name_of_shop" type="text" name="name_of_shop" value="<?=$v["name_of_shop"]?>" placeholder="〇〇店" required>
             <label>都道府県：</label>
             <select name="prefecture" id="prefecture" required>
-                <option value="" disabled="" selected="">選択してください</option>
+                <option><?=$v["prefecture"]?></option>
                 <option value="北海道">北海道</option>
                 <option value="青森県">青森県</option>
                 <option value="岩手県">岩手県</option>
@@ -115,42 +106,18 @@ include("funcs.php");
                 <option value="沖縄県">沖縄県</option>
             </select>
             <label>店舗代表者名：</label>
-            <input id="name_of_delegate" type="text" name="name_of_delegate" required>
+            <input id="name_of_delegate" type="text" name="name_of_delegate" value="<?=$v["name_of_delegate"]?>" required>
             <label>メールアドレス：</label>
-            <input id="mail" type="text" name="mail" placeholder="customer@harassment.com" required>
+            <input id="mail" type="text" name="mail" value="<?=$v["mail"]?>" placeholder="customer@harassment.com" required>
             <label>電話番号：</label>
-            <input id="phone" type="text" name="phone" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
+            <input id="phone" type="text" name="phone" value="<?=$v["phone"]?>" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
 
 
-            <button id="submit">追加</button>
+            <button id="submit">変更</button>
+            <input type="hidden" name="shop_id" value="<?=$v["shop_id"]?>">
           </form>
 
         </div>
-
-        <!-- ここに記録していく -->
-        <table class="output_table">
-              <h3>リスト</h3>
-              <tr>
-                <th>店舗番号</th>
-                <th>店舗名</th>
-                <th>都道府県</th>
-                <th>店舗代表者名</th>
-                <th>メールアドレス</th>
-                <th>電話番号</th>
-            </tr>
-
-            <?php foreach($values as $v){ ?>
-                <tr>
-                    <td class="shop_id"><?=$v["shop_id"]?></td>
-                    <td class="name_of_shop"><?=$v["name_of_shop"]?></td>
-                    <td class="prefecture"><?=$v["prefecture"]?></td>
-                    <td class="name_of_delegate"><?=$v["name_of_delegate"]?></td>
-                    <td class="mail"><?=$v["mail"]?></td>
-                    <td class="phone"><?=$v["phone"]?></td>
-                </tr>
-            <?php } ?>
-
-        </table>
     </div>
 
 </main>
