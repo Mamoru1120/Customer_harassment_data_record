@@ -10,6 +10,7 @@ $age = $_POST["age"];
 
 //DB接続
 include("funcs.php");
+sschk();
 $pdo = db_conn();
 
 //データ登録SQL作成

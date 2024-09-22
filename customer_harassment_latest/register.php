@@ -1,66 +1,26 @@
-<?php
-//必ずsession_startは最初に記述
-session_start();
-
-//DB接続します
-$shop_id = $_GET["shop_id"];
-
-include("funcs.php");
-sschk();
-$pdo = db_conn();
-
-//データ登録SQL作成
-$sql = "SELECT * FROM shop_an_table WHERE shop_id=:shop_id";
-$stmt = $pdo->prepare($sql);
-$stmt->bindValue(':shop_id',    $shop_id,    PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
-$status = $stmt->execute();
-
-//データ表示
-$values = "";
-if($status==false) {
-  sql_error($stmt);
-}
-
-//全データ取得
-$v =  $stmt->fetch(); //1レコードのみ取得
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>店舗情報更新</title>
+<title>新規登録申請</title>
 <script src="js/jquery-2.1.3.min.js"></script>
 <script src="js/index.js"></script>
 <link rel="stylesheet" href="css/sample.css">
 </head>
 
-
-<header>
-	
-	<div id="title">Analysis on customer harassment</div>
-	
-	<div id="navi_container">
-    <a href="input.php">報告フォーム</a>
-		<a href="read.php">クレームデータ</a>
-		<a href="read_customerlist.php">顧客リスト</a>
-		<a href="read_shoplist.php">店舗リスト</a>
-	</div>
-
-</header>
-
 <main>
 
     <div id="output_container">
+        
+        <h1>新規登録申請</h1>
 
         <div id="addition_container">
-          <form action="update_shop.php" method="post">
-            <h1>店舗情報更新</h1>
+          <form action="write_shop.php" method="post">
             <label>店舗名：</label>
-            <input id="name_of_shop" type="text" name="name_of_shop" value="<?=$v["name_of_shop"]?>" placeholder="〇〇店" required>
+            <input id="name_of_shop" type="text" name="name_of_shop" placeholder="〇〇店" required>
             <label>都道府県：</label>
             <select name="prefecture" id="prefecture" required>
-                <option><?=$v["prefecture"]?></option>
+                <option value="" disabled="" selected="">選択してください</option>
                 <option value="北海道">北海道</option>
                 <option value="青森県">青森県</option>
                 <option value="岩手県">岩手県</option>
@@ -110,21 +70,23 @@ $v =  $stmt->fetch(); //1レコードのみ取得
                 <option value="沖縄県">沖縄県</option>
             </select>
             <label>店舗代表者名：</label>
-            <input id="name_of_delegate" type="text" name="name_of_delegate" value="<?=$v["name_of_delegate"]?>" required>
+            <input id="name_of_delegate" type="text" name="name_of_delegate" required>
             <label>メールアドレス：</label>
-            <input id="mail" type="text" name="mail" value="<?=$v["mail"]?>" placeholder="customer@harassment.com" required>
+            <input id="mail" type="text" name="mail" placeholder="customer@harassment.com" required>
             <label>電話番号：</label>
-            <input id="phone" type="text" name="phone" value="<?=$v["phone"]?>" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
+            <input id="phone" type="text" name="phone" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
             <label>Login ID：</label>
-            <input id="lid" type="text" name="lid" value="<?=$v["lid"]?>" required>
+            <input id="lid" type="text" name="lid" required>
             <label>Login Passward：</label>
-            <input id="lpw" type="text" name="lpw" value="<?=$v["lpw"]?>" required>
+            <input id="lpw" type="text" name="lpw" required>
+            <input id="user_type" type="hidden" name="user_type" value="一般">
 
-            <button id="submit">変更</button>
-            <input type="hidden" name="shop_id" value="<?=$v["shop_id"]?>">
+            <button id="submit">登録</button>
           </form>
 
         </div>
+
+       
     </div>
 
 </main>

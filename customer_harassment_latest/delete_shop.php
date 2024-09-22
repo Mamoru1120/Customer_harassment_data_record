@@ -1,9 +1,13 @@
 <?php
+//必ずsession_startは最初に記述
+session_start();
+
 //1. POSTデータ取得
 $shop_id = $_GET["shop_id"];
 
 //2. DB接続します
 include("funcs.php");
+sschk();
 $pdo = db_conn();
 
 //３．データ登録SQL作成

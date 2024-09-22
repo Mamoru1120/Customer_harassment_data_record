@@ -1,8 +1,12 @@
 <?php
+//必ずsession_startは最初に記述
+session_start();
+
 //DB接続します
 $id = $_GET["id"];
 
 include("funcs.php");
+sschk();
 $pdo = db_conn();
 
 //データ登録SQL作成

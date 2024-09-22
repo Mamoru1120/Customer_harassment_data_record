@@ -1,6 +1,10 @@
 <?php
+//必ずsession_startは最初に記述
+session_start();
+
 //DB接続します
 include("funcs.php");
+sschk();
 $pdo = db_conn();
 
 //データ登録SQL作成
@@ -52,6 +56,11 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
+
+	<div>
+		<a href="logout.php">ログアウト</a>
+	</div>
+
 	</div>
 
 </header>
