@@ -29,18 +29,17 @@ $val = $stmt->fetch();         //1レコードだけ取得する方法
 //5.該当１レコードがあればSESSIONに値を代入
 //入力したPasswordと暗号化されたPasswordを比較！[戻り値：true,false]
 $pw = password_verify($lpw, $val["lpw"]); //$lpw = password_hash($lpw, PASSWORD_DEFAULT);   //パスワードハッシュ化
-if($pw){ 
+if($pw && $val["status"]=="承認"){ 
   //Login成功時
   $_SESSION["chk_ssid"]  = session_id();//SESSION_IDを取得
-  $_SESSION["kanri_flg"] = $val['kanri_flg'];
-  $_SESSION["name"]      = $val['name'];
+  $_SESSION["user_type"] = $val['user_type'];
+  $_SESSION["name_of_shop"] = $val['name_of_shop'];
   //Login成功時（input.phpへ）
   redirect("input.php");
 
 }else{
   //Login失敗時(login.phpへ)
   redirect("login.php");
-
 }
 
 exit();

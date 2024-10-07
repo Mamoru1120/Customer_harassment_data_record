@@ -38,20 +38,33 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 
 <header>
 	
-	<div id="title">Analysis on customer harassment</div>
+	<div id="title_login">Analysis on customer harassment</div>
 	
 	<div id="navi_container">
-    <a href="input.php">報告フォーム</a>
+    	<?php if($_SESSION["user_type"]=="管理者"){ ?>
+      		<a href="request_for_register_list.php">登録申請リスト</a>
+    	<?php } ?>
+    	<?php if($_SESSION["user_type"]=="一般"){ ?>
+      	<a href="input.php">報告フォーム</a>
+    	<?php } ?>
 		<a href="read.php">クレームデータ</a>
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
   
-  <div>
+  <div id="logout">
 		<a href="logout.php">ログアウト</a>
 	</div>
 
 </header>
+
+<div id="login_shop">
+    <?php if($_SESSION["user_type"]=="管理者"){ ?>
+      管理者さん、ようこそ
+    <?php } else if($_SESSION["user_type"]=="一般"){ ?>
+      <?=$_SESSION["name_of_shop"]?>さん、ようこそ
+    <?php } ?>
+</div>
 
 <main>
 

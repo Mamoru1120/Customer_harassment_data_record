@@ -1,4 +1,8 @@
 <?php
+//必ずsession_startは最初に記述
+session_start();
+include("funcs.php");
+sschk();
 
 //エラー表示
 ini_set("display_errors", 1);
@@ -11,10 +15,9 @@ $mail = $_POST["mail"];
 $phone = $_POST["phone"];
 $lid = $_POST["lid"];
 $lpw = $_POST["lpw"];
+$lpw = password_hash($lpw, PASSWORD_DEFAULT);   //パスワードハッシュ化
 
 //DB接続
-include("funcs.php");
-sschk();
 $pdo = db_conn();
 
 //データ登録SQL作成

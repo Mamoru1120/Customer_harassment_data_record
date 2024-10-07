@@ -80,10 +80,12 @@
             <label>Login Passward：</label>
             <input id="lpw" type="text" name="lpw" required>
             <input id="user_type" type="hidden" name="user_type" value="一般">
-
-            <button id="submit">登録</button>
+            <input id="status" type="hidden" name="status" value="未承認">
+            <button id="submit">申請</button>
           </form>
-
+          
+          <a href="login.php">戻る</a>
+          
         </div>
 
        

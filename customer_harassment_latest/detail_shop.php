@@ -38,16 +38,29 @@ $v =  $stmt->fetch(); //1レコードのみ取得
 
 <header>
 	
-	<div id="title">Analysis on customer harassment</div>
+	<div id="title_login">Analysis on customer harassment</div>
 	
-	<div id="navi_container">
-    <a href="input.php">報告フォーム</a>
+  <div id="navi_container">
+    <?php if($_SESSION["user_type"]=="管理者"){ ?>
+      <a href="request_for_register_list.php">登録申請リスト</a>
+    <?php } ?>
+    <?php if($_SESSION["user_type"]=="一般"){ ?>
+      <a href="input.php">報告フォーム</a>
+    <?php } ?>
 		<a href="read.php">クレームデータ</a>
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
 
 </header>
+
+<div id="login_shop">
+    <?php if($_SESSION["user_type"]=="管理者"){ ?>
+      管理者さん、ようこそ
+    <?php } else if($_SESSION["user_type"]=="一般"){ ?>
+      <?=$_SESSION["name_of_shop"]?>さん、ようこそ
+    <?php } ?>
+</div>
 
 <main>
 
@@ -118,7 +131,7 @@ $v =  $stmt->fetch(); //1レコードのみ取得
             <label>Login ID：</label>
             <input id="lid" type="text" name="lid" value="<?=$v["lid"]?>" required>
             <label>Login Passward：</label>
-            <input id="lpw" type="text" name="lpw" value="<?=$v["lpw"]?>" required>
+            <input id="lpw" type="text" name="lpw" required>
 
             <button id="submit">変更</button>
             <input type="hidden" name="shop_id" value="<?=$v["shop_id"]?>">

@@ -32,25 +32,39 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 <script src="js/jquery-2.1.3.min.js"></script>
 <script src="js/index.js"></script>
 <link rel="stylesheet" href="css/sample.css">
+
 </head>
 
 
 <header>
 	
-	<div id="title">Analysis on customer harassment</div>
+	<div id="title_login">Analysis on customer harassment</div>
 	
 	<div id="navi_container">
-    <a href="input.php">報告フォーム</a>
+    	<?php if($_SESSION["user_type"]=="管理者"){ ?>
+      		<a href="request_for_register_list.php">登録申請リスト</a>
+    	<?php } ?>
+    	<?php if($_SESSION["user_type"]=="一般"){ ?>
+      	<a href="input.php">報告フォーム</a>
+    	<?php } ?>
 		<a href="read.php">クレームデータ</a>
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
 
-  <div>
+  <div id="logout">
 		<a href="logout.php">ログアウト</a>
 	</div>
 
 </header>
+
+<div id="login_shop">
+  <?php if($_SESSION["user_type"]=="管理者"){ ?>
+    管理者さん、ようこそ
+  <?php } else if($_SESSION["user_type"]=="一般"){ ?>
+    <?=$_SESSION["name_of_shop"]?>さん、ようこそ
+  <?php } ?>
+</div>
 
 <main>
 
@@ -85,8 +99,16 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
                     <td class="required_time"><?=h($v["required_time"])?>分</td>
                     <td class="clame_content"><?=h($v["clame_content"])?></td>
                     <td class="response_content"><?=h($v["response_content"])?></td>
-                    <td><a href="detail.php?id=<?=h($v["id"])?>">📝</a></td>
-                    <td><a href="delete.php?id=<?=h($v["id"])?>">🚮</a></td>
+                    <td>
+                      <?php if($_SESSION["user_type"]=="管理者" || $_SESSION["name_of_shop"]==$v["name_of_shop"]){ ?>
+                        <a href="detail.php?id=<?=h($v["id"])?>">📝</a>
+    	                <?php } ?>
+                    </td>
+                    <td>
+                      <?php if($_SESSION["user_type"]=="管理者" || $_SESSION["name_of_shop"]==$v["name_of_shop"]){ ?>
+                        <a href="delete.php?id=<?=h($v["id"])?>">🚮</a>
+    	                <?php } ?>
+                    </td>
                 </tr>
             <?php } ?>
 

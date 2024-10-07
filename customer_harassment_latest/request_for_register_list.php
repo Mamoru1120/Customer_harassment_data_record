@@ -8,31 +8,19 @@ sschk();
 $pdo = db_conn();
 
 //データ登録SQL作成
-$sql1 = "SELECT * FROM shop_an_table";
-$sql2 = "SELECT * FROM customer_an_table";
-$stmt1 = $pdo->prepare($sql1);
-$stmt2 = $pdo->prepare($sql2);
-$status1 = $stmt1->execute();
-$status2 = $stmt2->execute();
-
+$sql = "SELECT * FROM shop_an_table";
+$stmt = $pdo->prepare($sql);
+$status = $stmt->execute();
 
 //データ表示
-$values1 = "";
-if($status1==false) {
-	sql_error($stmt1);
-}
-$values2 = "";
-if($status2==false) {
-	sql_error($stmt2);
+$values = "";
+if($status==false) {
+  sql_error($stmt);
 }
 
 //全データ取得
-$values1 =  $stmt1->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
-$json1 = json_encode($values1,JSON_UNESCAPED_UNICODE);
-
-//全データ取得
-$values2 =  $stmt2->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
-$json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
+$values =  $stmt->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
+$json = json_encode($values,JSON_UNESCAPED_UNICODE);
 
 ?>
 
@@ -40,7 +28,7 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 <html>
 <head>
 <meta charset="UTF-8">
-<title>報告フォーム</title>
+<title>登録申請リスト</title>
 <script src="js/jquery-2.1.3.min.js"></script>
 <script src="js/index.js"></script>
 <link rel="stylesheet" href="css/sample.css">
@@ -48,16 +36,18 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 
 <header>
 	
-	<div id="title">Analysis on customer harassment</div>
+	<div id="title_login">Analysis on customer harassment</div>
 	
 	<div id="navi_container">
-		<a href="request_for_register_list.php">登録申請リスト</a>
+    	<?php if($_SESSION["user_type"]=="管理者"){ ?>
+      		<a href="request_for_register_list.php">登録申請リスト</a>
+    	<?php } ?>
 		<a href="read.php">クレームデータ</a>
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
 
-	<div>
+	<div id="logout">
 		<a href="logout.php">ログアウト</a>
 	</div>
 
@@ -65,8 +55,51 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 
 </header>
 
+<div id="login_shop">
+    <?php if($_SESSION["user_type"]=="管理者"){ ?>
+      管理者さん、ようこそ
+    <?php } else if($_SESSION["user_type"]=="一般"){ ?>
+      <?=$_SESSION["name_of_shop"]?>さん、ようこそ
+    <?php } ?>
+</div>
+
 <main>
-    
+<div id="output_container">
+        
+        <h1>承認待ちリスト</h1>
+          
+        <!-- ここに記録していく -->
+        <table class="output_table">
+            <tr>
+            	<th>店舗番号</th>
+            	<th>店舗名</th>
+                <th>都道府県</th>
+                <th>店舗代表者名</th>
+                <th>メールアドレス</th>
+                <th>電話番号</th>
+				<th>Login ID</th>
+				<th>承認</th>
+				<th>否認</th>
+            </tr>
+
+            <?php foreach($values as $v){ ?>
+                <?php if(h($v["status"])=="未承認"){ ?>
+				<tr>
+                    <td class="shop_id"><?=h($v["shop_id"])?></td>
+                    <td class="name_of_shop"><?=h($v["name_of_shop"])?></td>
+                    <td class="prefecture"><?=h($v["prefecture"])?></td>
+                    <td class="name_of_delegate"><?=h($v["name_of_delegate"])?></td>
+                    <td class="mail"><?=h($v["mail"])?></td>
+                    <td class="phone"><?=h($v["phone"])?></td>
+					<td class="lid"><?=h($v["lid"])?></td>
+					<td><a href="accept_shop.php?shop_id=<?=h($v["shop_id"])?>">承認</a></td>
+					<td><a href="deny_shop.php?shop_id=<?=h($v["shop_id"])?>">否認</a></td>
+                </tr>
+				<?php } ?>
+            <?php } ?>
+
+        </table>
+    </div>
 </main>
 
 

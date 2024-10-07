@@ -7,6 +7,12 @@ function h($value){
 //DB接続関数：db_conn()
 function db_conn(){
     try {
+        // $db_name = "customer_harassment_db";    //データベース名
+        // $db_id   = "root";      //アカウント名
+        // $db_pw   = "";          //パスワード：XAMPPはパスワード無し or MAMPはパスワード"root"に修正してください。
+        // $db_host = "localhost"; //DBホスト
+
+        //さくら用
         $db_name = "";    //データベース名
         $db_id   = "";      //アカウント名
         $db_pw   = "";          //パスワード：XAMPPはパスワード無し or MAMPはパスワード"root"に修正してください。

@@ -65,17 +65,29 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 
 <header>
 	
-	<div id="title">Analysis on customer harassment</div>
+	<div id="title_login">Analysis on customer harassment</div>
 	
 	<div id="navi_container">
-		<a href="input.php">報告フォーム</a>
+    	<?php if($_SESSION["user_type"]=="管理者"){ ?>
+      		<a href="request_for_register_list.php">登録申請リスト</a>
+    	<?php } ?>
+    	<?php if($_SESSION["user_type"]=="一般"){ ?>
+      	<a href="input.php">報告フォーム</a>
+    	<?php } ?>
 		<a href="read.php">クレームデータ</a>
 		<a href="read_customerlist.php">顧客リスト</a>
 		<a href="read_shoplist.php">店舗リスト</a>
 	</div>
-	</div>
 
 </header>
+
+<div id="login_shop">
+    <?php if($_SESSION["user_type"]=="管理者"){ ?>
+      管理者さん、ようこそ
+    <?php } else if($_SESSION["user_type"]=="一般"){ ?>
+      <?=$_SESSION["name_of_shop"]?>さん、ようこそ
+    <?php } ?>
+</div>
 
 
 
@@ -88,14 +100,8 @@ $json2 = json_encode($values2,JSON_UNESCAPED_UNICODE);
 			<h2>クレーム対応者情報</h2>
 
 			<label>店舗名：</label>
-			<select name="name_of_shop" id="name_of_shop" required>
-				<option><?=$v["name_of_shop"]?></option>
-				<?php foreach($values1 as $v1){ ?>
-                	<option><?=$v1["name_of_shop"]?></option>
-           		 <?php } ?>
-			</select>
+			<input id="name_of_shop" type="text" name="name_of_shop" value="<?=$v["name_of_shop"]?>" readonly>
 			
-
 			<label>クレーム対応者：</label>
 			<input id="name_of_staff" type="text" name="name_of_staff" value="<?=$v["name_of_staff"]?>" required>
 

@@ -9,10 +9,18 @@ header{
   justify-content: start;
   align-items: center;
   background-color: rgb(47, 51, 47);
+}
+
+#header_login{
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  background-color: rgb(47, 51, 47);
   margin-bottom: 15px;
 }
 
-#title{
+#title_login{
   font-size: 25px;
   font-weight: bold;
   text-align: center;
@@ -25,12 +33,14 @@ header{
 #navi_container{
   display: flex;
   justify-content: center;
+  color: rgb(202, 202, 202);
+  font-weight: bold;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-left: 10px;
 }
 
-a{
+#navi_container a{
   padding: 10px;
   margin-left: 15px;
   margin-right: 15px;
@@ -38,6 +48,24 @@ a{
   font-weight: bold;
   border-left: 1px solid white;
   text-decoration: none;
+}
+
+#logout a{
+  padding: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+  color: rgb(202, 202, 202);
+  font-weight: bold;
+  border-left: 1px solid white;
+  text-decoration: none;
+}
+
+#login_shop{
+  padding: 10px;
+  color: rgb(202, 202, 202);
+  font-weight: bold;
+  background-color: rgb(47, 51, 47);
+  margin-bottom: 15px;
 }
 
 #register_link, #master_login_link, #change_link, #login_link{

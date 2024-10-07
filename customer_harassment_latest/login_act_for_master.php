@@ -32,6 +32,7 @@ $pw = password_verify($mlpw, $val["mlpw"]); //$lpw = password_hash($lpw, PASSWOR
 if($pw){ 
   //Login成功時
   $_SESSION["chk_ssid"]  = session_id();//SESSION_IDを取得
+  $_SESSION["user_type"] = $val['user_type'];
   //Login成功時（input.phpへ）
   redirect("request_for_register_list.php");
 

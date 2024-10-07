@@ -26,6 +26,7 @@
             <input type="text" name="mlid">
             <label>PW:</label>  
             <input type="password" name="mlpw">
+            <input type="hidden" nama="user_name" value="管理者">
             <input type="submit" value="登録">
             
           </form>
